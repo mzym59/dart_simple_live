@@ -21,8 +21,7 @@ jobs:
 
       # 创建 Android 目录（可选）
       - name: Create Android directory
-        run: |
-          mkdir -p simpleliveapp/android
+        run: mkdir -p simpleliveapp/android
 
       # 下载 Android Keystore（Base64 编码）
       - name: Download Android Keystore
@@ -35,10 +34,11 @@ jobs:
       # 创建 key.properties 文件
       - name: Create key.properties
         run: |
-          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > simpleliveapp/android/key.properties
-          echo "storePassword=${{ secrets.STOREPASSWORD }}" >> simpleliveapp/android/key.properties
-          echo "keyPassword=${{ secrets.KEYPASSWORD }}" >> simpleliveapp/android/key.properties
-          echo "keyAlias=${{ secrets.KEYALIAS }}" >> simpleliveapp/android/key.properties
+          cd simpleliveapp
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
+          echo "storePassword=${{ secrets.STOREPASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.KEYPASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.KEYALIAS }}" >> android/key.properties
 
       # 设置 Java 环境
       - uses: actions/setup-java@v4
@@ -72,9 +72,9 @@ jobs:
         with:
           name: android_apk
           path: |
-            simpleliveapp/build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
-            simpleliveapp/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-            simpleliveapp/build/app/outputs/flutter-apk/app-x86_64-release.apk
+            build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+            build/app/outputs/flutter-apk/app-x86_64-release.apk
 
       # 读取版本信息
       - name: Read Version Info
@@ -92,9 +92,9 @@ jobs:
           prerelease: ${{ fromJson(steps.version.outputs.content).prerelease }}
           token: ${{ secrets.TOKEN }}
           files: |
-            simpleliveapp/build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
-            simpleliveapp/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-            simpleliveapp/build/app/outputs/flutter-apk/app-x86_64-release.apk
+            build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+            build/app/outputs/flutter-apk/app-x86_64-release.apk
 
       # 完成
       - run: echo "🍏 Android build completed successfully."
