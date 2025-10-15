@@ -1,9 +1,12 @@
-name: Android Build and Release
+name: Android Build and Release (Manual Trigger)
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Specify the version number (e.g., v1.0.0)"
+        required: true
+        default: "v1.0.0"
 
 jobs:
   build-and-release:
@@ -68,7 +71,7 @@ jobs:
             simpleliveapp/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
             simpleliveapp/build/app/outputs/flutter-apk/app-x86_64-release.apk
 
-      # 读取版本信息
+      # 读取版本信息（从 `app_version.json` 文件）
       - name: Read Version Info
         id: version
         uses: juliangruber/read-file-action@v1
